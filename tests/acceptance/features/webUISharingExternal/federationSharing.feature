@@ -225,6 +225,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And these users have been created:
       | username |
       | user-never-used-before |
+    And as user "user-never-used-before"
+    When the user sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares"
     When the user creates a folder with the name "top-folder" using the webUI
     When the user shares folder "top-folder" with remote user "user1@%remote_server_without_scheme%" using the webUI
     And using server "REMOTE"
