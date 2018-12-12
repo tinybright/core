@@ -383,6 +383,7 @@ pipeline:
       - TEST_SERVER_URL=https://server
       - PLATFORM=Linux
       - MAILHOG_HOST=email
+      - BEHAT_FEATURE=/drone/src/tests/acceptance/features/webUISharingExternal/federationSharing.feature:223
     commands:
       - touch /drone/saved-settings.sh
       - . /drone/saved-settings.sh
