@@ -225,22 +225,23 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And these users have been created:
       | username |
       | user-never-used-before |
-    When the user shares folder "simple-folder" with remote user "user1@%remote_server_without_scheme%" using the webUI
+    When the user creates a folder with the name "top-folder" using the webUI
+    When the user shares folder "top-folder" with remote user "user1@%remote_server_without_scheme%" using the webUI
     And using server "REMOTE"
     And user "user1" re-logs in to "%remote_server%" using the webUI
     And the user accepts the offered remote shares using the webUI
-    And user "user1" from server "REMOTE" has shared "/simple-folder (2)" with user "user-never-used-before" from server "LOCAL"
+    And user "user1" from server "REMOTE" has shared "/top-folder" with user "user-never-used-before" from server "LOCAL"
     And using server "LOCAL"
     And user "user1" re-logs in to "%local_server%" using the webUI
-    And the user opens the share dialog for folder "simple-folder"
-    And the user sets the sharing permissions of "user-never-used-before@%local_server% (federated)" for "simple-folder" using the webUI to
+    And the user opens the share dialog for folder "top-folder"
+    And the user sets the sharing permissions of "user-never-used-before@%local_server% (federated)" for "top-folder" using the webUI to
       | edit | no |
     And user "user-never-used-before" re-logs in to "%local_server%" using the webUI
     And the user accepts the offered remote shares using the webUI
-    Then as "user-never-used-before" folder "/simple-folder (2)" should exist
-    And as "user-never-used-before" file "/simple-folder (2)/lorem.txt" should exist
-    And the user opens folder "simple-folder (2)" using the webUI
-    And it should not be possible to delete file "lorem.txt" using the webUI
+    Then as "user-never-used-before" folder "/top-folder" should exist
+    #And as "user-never-used-before" file "/simple-folder (2)/lorem.txt" should exist
+    And the user opens folder "top-folder" using the webUI
+   # And it should not be possible to delete file "lorem.txt" using the webUI
 
   @skip @issue-32732
   Scenario: test sharing long file names with federation share
