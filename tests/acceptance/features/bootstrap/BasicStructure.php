@@ -938,6 +938,7 @@ trait BasicStructure {
 			$this->getBaseUrl(),
 			$user, $password, $verb, $url, $bodyArray, $this->ocsApiVersion
 		);
+		var_dump($this->response->getBody()->getContents());
 	}
 
 	/**
