@@ -173,7 +173,11 @@ class SharingHelper {
 		if ($expireDate !== null) {
 			$fd['expireDate'] = \date('Y-m-d', \strtotime($expireDate));
 		}
-
+		echo "\n------------------------------------\n";
+		var_dump($fullUrl);
+		var_dump($user);
+		var_dump($password);
+		var_dump($fd);
 		return HttpRequestHelper::post($fullUrl, $user, $password, null, $fd);
 	}
 }
