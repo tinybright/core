@@ -232,6 +232,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And using server "REMOTE"
     And user "user1" re-logs in to "%remote_server%" using the webUI
     And the user accepts the offered remote shares using the webUI
+    And using server "LOCAL"
+    And as user "user-never-used-before"
+    When the user sends HTTP method "GET" to OCS API endpoint "/apps/files_sharing/api/v1/shares"
     And user "user1" from server "REMOTE" has shared "/top-folder" with user "user-never-used-before" from server "LOCAL"
     And using server "LOCAL"
     And user "user1" re-logs in to "%local_server%" using the webUI
