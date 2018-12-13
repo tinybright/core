@@ -39,6 +39,9 @@ use OCP\Lock\Persistent\ILock;
  */
 class Lock extends Entity implements ILock {
 
+	const DEPTH_ZERO = 0;
+	const DEPTH_INFINITY = -1;
+
 	/** @var int BIGINT - foreign key to oc_filecache.fileid */
 	protected $fileId;
 	/** @var string - plain text field as transmitted by clients */
