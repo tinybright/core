@@ -169,15 +169,20 @@ class FederatedShareProvider implements IShareProvider {
 		} catch (ShareNotFound $e) {
 			$remoteShare = null;
 		}
-
+		$remoteShareMessage = print_r($remoteShare, true);
+		$this->logger->alert("remoteShare: $remoteShareMessage", ['app' => 'Federated File Sharing']);
 		if ($remoteShare) {
 			try {
 				$uidOwner = $remoteShare['owner'] . '@' . $remoteShare['remote'];
+				$this->logger->alert("uidOwner: $uidOwner", ['app' => 'Federated File Sharing']);
 				$shareId = $this->addShareToDB($itemSource, $itemType, $shareWith, $sharedBy, $uidOwner, $permissions, 'tmp_token_' . \time());
+				$this->logger->alert("shareId: $shareId", ['app' => 'Federated File Sharing']);
 				$share->setId($shareId);
 				list($token, $remoteId) = $this->askOwnerToReShare($shareWith, $share, $shareId);
 				// remote share was create successfully if we get a valid token as return
 				$send = \is_string($token) && $token !== '';
+				$this->logger->alert("token: $token", ['app' => 'Federated File Sharing']);
+				$this->logger->alert("remoteId: $remoteId", ['app' => 'Federated File Sharing']);
 			} catch (\Exception $e) {
 				// fall back to old re-share behavior if the remote server
 				// doesn't support flat re-shares (was introduced with ownCloud 9.1)
@@ -906,11 +911,12 @@ class FederatedShareProvider implements IShareProvider {
 		//TODO: probabaly a good idea to send unshare info to remote servers
 
 		$qb = $this->dbConnection->getQueryBuilder();
-
-		$qb->delete($this->shareTable)
+		$this->logger->alert("deleting user: uid = $uid; shareType = $shareType", ['app' => 'Federated File Sharing']);
+		$result = $qb->delete($this->shareTable)
 			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE)))
 			->andWhere($qb->expr()->eq('uid_owner', $qb->createNamedParameter($uid)))
 			->execute();
+		$this->logger->alert("SQL result after deleting user: $result", ['app' => 'Federated File Sharing']);
 	}
 
 	/**
