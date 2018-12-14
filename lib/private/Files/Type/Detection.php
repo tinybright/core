@@ -151,6 +151,18 @@ class Detection implements IMimeTypeDetector {
 	}
 
 	/**
+	 * Detect if the file is a shared object file. We detect this file
+	 * with a regex.
+	 *
+	 * @param string $fileName
+	 * @return bool true if file is a shared object else false
+	 */
+	private function detectSharedObjFileName($fileName) {
+		\preg_match("/(.*?)\.(so)\.(.*)/i", $fileName, $match);
+		return (\count($match) === 4) && ($match[2] === 'so');
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getAllMappings() {
@@ -171,8 +183,12 @@ class Detection implements IMimeTypeDetector {
 		// note: leading dot doesn't qualify as extension
 		if (\strpos($fileName, '.') > 0) {
 			//try to guess the type by the file extension
-			$extension = \strtolower(\strrchr($fileName, '.'));
-			$extension = \substr($extension, 1); //remove leading .
+			if ($this->detectSharedObjFileName($fileName)) {
+				$extension = 'so';
+			} else {
+				$extension = \strtolower(\strrchr($fileName, '.'));
+				$extension = \substr($extension, 1); //remove leading .
+			}
 			return (isset($this->mimetypes[$extension], $this->mimetypes[$extension][0]))
 				? $this->mimetypes[$extension][0]
 				: 'application/octet-stream';
